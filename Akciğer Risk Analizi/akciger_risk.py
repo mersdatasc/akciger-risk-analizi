@@ -12,7 +12,7 @@ def calculate_base_risk_score(daily_cigarettes, smoking_years):
     """Temel risk skoru hesaplama"""
     base_score = 0
     
-    # Paket-yıl riski
+   
     pack_years = calculate_pack_years(daily_cigarettes, smoking_years)
     
     if pack_years > 30:
@@ -26,7 +26,7 @@ def calculate_base_risk_score(daily_cigarettes, smoking_years):
     elif pack_years > 0:
         base_score += 5
     else:
-        base_score = 0  # Sigara içmeyenler
+        base_score = 0  
     
     return base_score
 
@@ -34,7 +34,7 @@ def calculate_environmental_risk(work_environment, genetic_history):
     """Çevresel risk hesaplama"""
     env_score = 0
     
-    # İş ortamı riski
+   
     work_risk = {
         'Ofis': 0,
         'Tozlu Ortam': 10,
@@ -44,7 +44,7 @@ def calculate_environmental_risk(work_environment, genetic_history):
     }
     env_score += work_risk.get(work_environment, 0)
     
-    # Genetik risk
+ 
     genetic_risk = {
         'Yok': 0,
         '2. Derece Akraba': 10,
@@ -58,7 +58,7 @@ def calculate_protective_factors(exercise, diet, age):
     """Koruyucu faktörler"""
     protective_score = 0
     
-    # Egzersiz bonusu
+
     exercise_bonus = {
         'Hiç': 0,
         'Haftada 1-2 Gün': -5,
@@ -66,7 +66,7 @@ def calculate_protective_factors(exercise, diet, age):
     }
     protective_score += exercise_bonus.get(exercise, 0)
     
-    # Beslenme bonusu
+   
     diet_bonus = {
         'Kötü': 0,
         'Orta': -4,
@@ -74,7 +74,7 @@ def calculate_protective_factors(exercise, diet, age):
     }
     protective_score += diet_bonus.get(diet, 0)
     
-    # Genç yaş bonusu
+ 
     if age < 40:
         protective_score -= 5
     
@@ -114,19 +114,18 @@ def generate_recommendations(risk_category, user_data):
             "💪 **Spor:** Aktif yaşam tarzını devam ettirin"
         ])
     
-    # Sigara ile ilgili öneriler
+ 
     if user_data['daily_cigarettes'] > 10:
         recommendations.append("📉 **Hedef:** Sigara sayısını günde 10'un altına indirin")
     elif user_data['daily_cigarettes'] > 0:
         recommendations.append("🎯 **Hedef:** Tamamen bırakmak için plan yapın")
-    
-    # Egzersiz önerileri
+ 
     if user_data['exercise'] == 'Hiç':
         recommendations.append("🏃 **Spor:** Haftada 3 gün 30 dakika yürüyüş yapın")
     elif user_data['exercise'] == 'Haftada 1-2 Gün':
         recommendations.append("💪 **Geliştirme:** Egzersizi haftada 3 güne çıkarın")
     
-    # Beslenme önerileri
+  
     if user_data['diet'] == 'Kötü':
         recommendations.append("🥗 **Beslenme:** Antioksidan bakımından zengin besinler tüketin")
     
@@ -145,7 +144,7 @@ def main():
         layout="centered"
     )
     
-    # Stil ayarları - RENK PROBLEMİ DÜZELTİLDİ
+  
     st.markdown("""
     <style>
     .main-header {
@@ -189,7 +188,7 @@ def main():
             height = st.number_input("Boyunuz (cm)", min_value=100, max_value=220, value=170)
             weight = st.number_input("Kilonuz (kg)", min_value=30, max_value=200, value=70)
         
-        # BMI hesaplama
+    
         bmi = calculate_bmi(weight, height)
         if bmi > 0:
             st.write(f"**Vücut Kitle İndeksi:** {bmi:.1f}")
@@ -247,7 +246,7 @@ def main():
         submitted = st.form_submit_button("🔍 Risk Analizi Yap")
         
         if submitted:
-            # Kullanıcı verilerini topla
+          
             user_data = {
                 'daily_cigarettes': daily_cigarettes,
                 'exercise': exercise,
@@ -257,28 +256,28 @@ def main():
                 'age': age
             }
             
-            # Risk hesaplamaları
+           
             base_risk = calculate_base_risk_score(daily_cigarettes, smoking_years)
             env_risk = calculate_environmental_risk(work_environment, genetic_history)
             protective = calculate_protective_factors(exercise, diet, age)
             
             total_score = base_risk + env_risk + protective
-            total_score = max(0, min(100, total_score))  # 0-100 arası
+            total_score = max(0, min(100, total_score)) 
             
             risk_category, risk_emoji, risk_class = categorize_risk(total_score)
             pack_years = calculate_pack_years(daily_cigarettes, smoking_years)
             
-            # Sonuçları göster
+         
             st.success("✅ Analiz tamamlandı!")
             
-            # Risk kategorisi
+          
             st.markdown(f"<div class='risk-{risk_class}'>{risk_emoji} {risk_category}</div>", unsafe_allow_html=True)
             
-            # Progress bar
+           
             st.progress(total_score / 100)
             st.write(f"**Risk Skoru:** {total_score}/100")
             
-            # Detaylı bilgiler
+           
             st.subheader("📈 Detaylı Risk Analizi")
             
             col9, col10, col11 = st.columns(3)
@@ -292,7 +291,7 @@ def main():
             with col11:
                 st.metric("Koruyucu Faktörler", f"{protective}p")
             
-            # Ek bilgiler
+           
             with st.expander("🔍 Risk Detayları"):
                 st.write(f"**Paket-Yıl Hesaplaması:** {pack_years:.1f}")
                 st.write(f"**İş Ortamı Risk Puanı:** {env_risk}p")
@@ -300,17 +299,17 @@ def main():
                 st.write(f"**Toplam Risk Skoru:** {total_score}p")
                 
                 if daily_cigarettes > 0:
-                    monthly_cost = (daily_cigarettes / 20) * 100 * 30  # 50 TL paket fiyatı
+                    monthly_cost = (daily_cigarettes / 20) * 100 * 30  
                     st.write(f"**Aylık Sigara Maliyeti:** ~{monthly_cost:.0f} TL")
             
-            # Öneriler - BASİT STREAMLIT COMPONENTLERİ KULLANALIM
+           
             st.subheader("💡 Kişiselleştirilmiş Öneriler")
             
             recommendations = generate_recommendations(risk_category, user_data)
             
-            # Basit kutu yerine info bileşenleri kullanalım
+            
             for i, recommendation in enumerate(recommendations, 1):
-                # Öneri türüne göre farklı renkler
+               
                 if "🚨" in recommendation or "ACİL" in recommendation:
                     st.error(f"{i}. {recommendation}")
                 elif "⚠️" in recommendation:
@@ -320,11 +319,11 @@ def main():
                 else:
                     st.info(f"{i}. {recommendation}")
             
-            # Sağlık uyarısı
             st.info("""
             **💡 Önemli Not:** Bu analiz sadece bilgilendirme amaçlıdır. 
             Kesin teşhis için lütfen bir sağlık uzmanına başvurun.
             """)
 
 if __name__ == "__main__":
+
     main()
